@@ -1,15 +1,15 @@
 // Vite turns this import into a production-safe URL. Keep it as a file so
 // even this tiny example demonstrates a separately deployed asset.
 // @deno-types="./asset-url.d.ts"
-import { log } from "node:console";
+// import { log } from "node:console";
 import tileUrl from "./assets/clker-free-vector-images-beer-309778_1280.png?no-inline";
-import { upgrade } from "asset:///node/undici/api.d.ts";
+// import { upgrade } from "asset:///node/undici/api.d.ts";
 
-let dropCount = 500;
-let currDropRate = 1;
-let currDps = 1;
+let dropCount = 0;
+let currDPS = 0;
+let currDPC = 1;
 
-let upgrades = {
+const upgrades = {
   niceClothes: {
     name: "Proper Clothing",
     desc:
@@ -111,11 +111,12 @@ let upgrades = {
 const app = document.querySelector<HTMLElement>("#app")!;
 app.style.display = "flex";
 app.style.flexDirection = "column";
+app.style.height = "100vh";
 
-app.style.backgroundImage = `linear-gradient( rgba(0,0,0,.5), rgba(0, 0, 0, 0.81) ), 
+app.style.backgroundImage =
+  `linear-gradient( rgba(0,0,0,.5), rgba(0, 0, 0, 0.81) ), 
 url("src/assets/patrick-tomasso-GXXYkSwndP4-unsplash.jpg")`;
-app.style.backgroundSize = "100%"
-
+app.style.backgroundSize = "100%";
 
 const heading = document.createElement("h1");
 heading.textContent = "D1 project";
@@ -197,7 +198,7 @@ upgradeContainer.style.width = "100%";
 app.append(upgradeContainer);
 
 function inflatePrice(cost: number) {
-  return (cost * 1.35)
+  return (cost * 1.35);
 }
 
 type Upgrade = (typeof upgrades)[keyof typeof upgrades];
@@ -224,8 +225,6 @@ for (const [id, upgrade] of Object.entries(upgrades)) {
     upgrade: upgrade,
   });
 
-
-  
   button.addEventListener("click", () => {
     if (dropCount >= upgrade.cost) {
       dropCount -= upgrade.cost;
@@ -240,8 +239,6 @@ for (const [id, upgrade] of Object.entries(upgrades)) {
 
   upgradeContainer.append(button);
 }
-
-
 
 function updateUpgradeButtons() {
   for (const entry of upgradeButtons) {
@@ -264,9 +261,11 @@ function updateUpgradeButtons() {
     if (dropCount < entry.upgrade.cost) {
       entry.button.disabled = true;
       entry.button.style.cursor = "default";
+      entry.button.style.backgroundColor = "#daa37e";
     } else {
       entry.button.disabled = false;
       entry.button.style.cursor = "pointer";
+      entry.button.style.backgroundColor = "#db7937";
     }
   }
 }
@@ -283,14 +282,14 @@ for (const entry of upgradeButtons) {
         typeof upgrade.dropsPerClick === "number" &&
         Number.isFinite(upgrade.dropsPerClick)
       ) {
-        currDps += upgrade.dropsPerClick;
+        currDPC += upgrade.dropsPerClick;
       }
       if (
         "dropRate" in upgrade &&
         typeof upgrade.dropRate === "number" &&
         Number.isFinite(upgrade.dropRate)
       ) {
-        currDropRate += upgrade.dropRate;
+        currDPS += upgrade.dropRate;
       }
     } else {
       console.log("No valid upgrades found.");
@@ -309,8 +308,8 @@ function updateDisplay() {
   } \n Glasses Served: ${Math.floor(dropCount / 100)}`;
 
   statsDisplay.textContent =
-    `Drops per click: ${currDps} \n Drops per second: ${
-      Math.floor(currDropRate * 10) / 10
+    `Drops per click: ${currDPC} \n Drops per second: ${
+      Math.floor(currDPS * 10) / 10
     }`;
 
   progressBar.style.height = `${determineProgress(dropCount)}%`;
@@ -319,7 +318,7 @@ function updateDisplay() {
 }
 
 image.addEventListener("click", () => {
-  dropCount += currDps;
+  dropCount += currDPC;
   //console.log(`Drop count now: ${dropCount}`);
 
   updateDisplay();
@@ -339,7 +338,7 @@ function frame(Time: number) {
   const deltaTime = (Time - LastTime) / 1000;
   LastTime = Time;
 
-  dropCount += currDropRate * deltaTime;
+  dropCount += currDPS * deltaTime;
 
   updateDisplay();
 
