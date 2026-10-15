@@ -112,12 +112,19 @@ const app = document.querySelector<HTMLElement>("#app")!;
 app.style.display = "flex";
 app.style.flexDirection = "column";
 
+app.style.backgroundImage = `linear-gradient( rgba(0,0,0,.5), rgba(0, 0, 0, 0.81) ), 
+url("src/assets/patrick-tomasso-GXXYkSwndP4-unsplash.jpg")`;
+app.style.backgroundSize = "100%"
+
+
 const heading = document.createElement("h1");
 heading.textContent = "D1 project";
 heading.style.whiteSpace = "pre-line";
 heading.style.marginLeft = "auto";
 heading.style.marginRight = "auto";
 heading.style.marginBottom = "0";
+
+heading.style.color = "white";
 
 app.append(heading);
 
@@ -126,6 +133,8 @@ const statsDisplay = document.createElement("p");
 statsDisplay.style.fontSize = "18px";
 statsDisplay.style.textAlign = "center";
 statsDisplay.style.whiteSpace = "pre-line";
+
+statsDisplay.style.color = "white";
 
 app.append(statsDisplay);
 
@@ -187,6 +196,10 @@ upgradeContainer.style.width = "100%";
 
 app.append(upgradeContainer);
 
+function inflatePrice(cost: number) {
+  return (cost * 1.35)
+}
+
 type Upgrade = (typeof upgrades)[keyof typeof upgrades];
 
 const upgradeButtons: {
@@ -211,9 +224,14 @@ for (const [id, upgrade] of Object.entries(upgrades)) {
     upgrade: upgrade,
   });
 
+
+  
   button.addEventListener("click", () => {
     if (dropCount >= upgrade.cost) {
       dropCount -= upgrade.cost;
+
+      upgrade.cost = inflatePrice(upgrade.cost);
+
       console.log(`Purchased ${upgrade.name}`);
       upgrade.owned += 1;
       updateDisplay();
@@ -222,6 +240,8 @@ for (const [id, upgrade] of Object.entries(upgrades)) {
 
   upgradeContainer.append(button);
 }
+
+
 
 function updateUpgradeButtons() {
   for (const entry of upgradeButtons) {
@@ -236,7 +256,7 @@ function updateUpgradeButtons() {
     }
 
     button.textContent = `${upgrade.name}\n` +
-      `${upgrade.cost} Drops\n` +
+      `${Math.floor(upgrade.cost * 10) / 10} Drops\n` +
       `${bonusText}\n` +
       `Owned: ${upgrade.owned}`;
 
