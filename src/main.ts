@@ -226,15 +226,26 @@ for (const [id, upgrade] of Object.entries(upgrades)) {
   });
 
   button.addEventListener("click", () => {
-    if (dropCount >= upgrade.cost) {
-      dropCount -= upgrade.cost;
-
-      upgrade.cost = inflatePrice(upgrade.cost);
-
-      console.log(`Purchased ${upgrade.name}`);
-      upgrade.owned += 1;
-      updateDisplay();
+    if (dropCount < upgrade.cost) {
+      return;
     }
+
+    dropCount -= upgrade.cost;
+
+    // Apply upgrade bonus
+    if ("dropsPerClick" in upgrade) {
+      currDPC += upgrade.dropsPerClick;
+    } else {
+      currDPS += upgrade.dropRate;
+    }
+
+    // Update upgrade progression
+    upgrade.owned++;
+    upgrade.cost = inflatePrice(upgrade.cost);
+
+    console.log(`Purchased ${upgrade.name}`);
+
+    updateDisplay();
   });
 
   upgradeContainer.append(button);
@@ -268,33 +279,6 @@ function updateUpgradeButtons() {
       entry.button.style.backgroundColor = "#db7937";
     }
   }
-}
-
-for (const entry of upgradeButtons) {
-  entry.button.addEventListener("click", () => {
-    type UpgradeKey = keyof typeof upgrades;
-    const key = entry.button.id as UpgradeKey;
-
-    if (key in upgrades) {
-      const upgrade = upgrades[key];
-      if (
-        "dropsPerClick" in upgrade &&
-        typeof upgrade.dropsPerClick === "number" &&
-        Number.isFinite(upgrade.dropsPerClick)
-      ) {
-        currDPC += upgrade.dropsPerClick;
-      }
-      if (
-        "dropRate" in upgrade &&
-        typeof upgrade.dropRate === "number" &&
-        Number.isFinite(upgrade.dropRate)
-      ) {
-        currDPS += upgrade.dropRate;
-      }
-    } else {
-      console.log("No valid upgrades found.");
-    }
-  });
 }
 
 // const message = document.createElement("p");
