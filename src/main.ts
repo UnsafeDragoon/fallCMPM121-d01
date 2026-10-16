@@ -151,8 +151,7 @@ const upgrades = {
     dropRate: 100,
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
-    url:
-      `${slide}`,
+    url: `${slide}`,
   },
   beerRiver: {
     name: "River of Beer",
