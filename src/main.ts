@@ -6,6 +6,22 @@ import tileUrl from "./assets/clker-free-vector-images-beer-309778_1280.png?no-i
 // import { upgrade } from "asset:///node/undici/api.d.ts";
 import backgroundUrl from "./assets/patrick-tomasso-GXXYkSwndP4-unsplash.jpg?no-inline";
 
+import bgm from "./assets/poradovskyi-cozy-chill-lounge-music-469048.mp3?no-inline";
+
+import clickSound from "./assets/freesound_community-water-drip-45622.mp3?no-inline";
+import buySound from "./assets/u_byub5wd934-cashier-quotka-chingquot-sound-effect-129698.mp3?no-inline";
+
+import suit from "./assets/upgrade-sprites/bartenderSuit.png?no-inline";
+import premBeer from "./assets/upgrade-sprites/premBeer.png?no-inline";
+import ads from "./assets/upgrade-sprites/EDPDN4AAKFPZ5DXIKK5G7XXTEQ.jpg?no-inline";
+import tap from "./assets/upgrade-sprites/tap.png?no-inline";
+import barry from "./assets/upgrade-sprites/barry.png?no-inline";
+import keg from "./assets/upgrade-sprites/keg.png?no-inline";
+import shower from "./assets/upgrade-sprites/beerShower.png?no-inline";
+import slide from "./assets/upgrade-sprites/75628038-sliding-down-a-fun-water-slide-at-a-waterpark-happy-man-is-raising-his-arms-as-he-enjoys-the-ride (1).jpg?no-inline";
+import river from "./assets/upgrade-sprites/beerRiver.png?no-inline";
+import gieser from "./assets/upgrade-sprites/beehive (1).jpg?no-inline";
+
 class SoundManager {
   private soundPath: string;
 
@@ -24,16 +40,16 @@ class SoundManager {
 }
 
 const music = new Audio(
-  "./src/assets/poradovskyi-cozy-chill-lounge-music-469048.mp3",
+  `${bgm}`,
 );
 music.loop = true;
 
 const clickSFX = new SoundManager(
-  "./src/assets/freesound_community-water-drip-45622.mp3",
+  `${clickSound}`,
 );
 
 const buySFX = new SoundManager(
-  "./src/assets/u_byub5wd934-cashier-quotka-chingquot-sound-effect-129698.mp3",
+  `${buySound}`,
 );
 
 let musicOn = false;
@@ -52,7 +68,7 @@ const upgrades = {
     dropsPerClick: 5,
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
-    url: "bartenderSuit.png",
+    url: `${suit}`,
   },
   betterBeer: {
     id: "betterBeer",
@@ -65,7 +81,7 @@ const upgrades = {
     dropsPerClick: 15,
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
-    url: "premBeer.png",
+    url: `${premBeer}`,
   },
   advertising: {
     id: "advertising",
@@ -78,7 +94,7 @@ const upgrades = {
     dropsPerClick: 50,
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
-    url: "EDPDN4AAKFPZ5DXIKK5G7XXTEQ.jpg",
+    url: `${ads}`,
   },
 
   moreTap: {
@@ -92,7 +108,7 @@ const upgrades = {
     dropRate: 0.1,
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
-    url: "tap.png",
+    url: `${tap}`,
   },
   barry: {
     name: "Barry",
@@ -103,7 +119,7 @@ const upgrades = {
     dropRate: 1,
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
-    url: "barry.png",
+    url: `${barry}`,
   },
   beerKeg: {
     name: "Beer Keg",
@@ -114,7 +130,7 @@ const upgrades = {
     dropRate: 10,
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
-    url: "keg.png",
+    url: `${keg}`,
   },
   beerShowers: {
     name: "Beer Shower",
@@ -124,7 +140,7 @@ const upgrades = {
     dropRate: 50,
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
-    url: "beerShower.png",
+    url: `${shower}`,
   },
   beerSlide: {
     name: "Beer Slip-n-Slide",
@@ -136,7 +152,7 @@ const upgrades = {
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
     url:
-      "75628038-sliding-down-a-fun-water-slide-at-a-waterpark-happy-man-is-raising-his-arms-as-he-enjoys-the-ride (1).jpg",
+      `${slide}`,
   },
   beerRiver: {
     name: "River of Beer",
@@ -147,7 +163,7 @@ const upgrades = {
     dropRate: 250,
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
-    url: "beerRiver.png",
+    url: `${river}`,
   },
   beerGieser: {
     name: "Beer Gieser",
@@ -158,7 +174,7 @@ const upgrades = {
     dropRate: 500,
     owned: 0,
     spriteLine: null as HTMLDivElement | null,
-    url: "beehive (1).jpg",
+    url: `${gieser}`,
   },
 };
 
@@ -324,10 +340,9 @@ function purchaseUpgrade(upgrade: Upgrade) {
 }
 
 function addSprite(upgrade: Upgrade) {
-  const dir = "./src/assets/upgrade-sprites/";
   const sprite = document.createElement("img");
   sprite.style.width = "50px";
-  sprite.src = `${dir}${upgrade.url}`;
+  sprite.src = `${upgrade.url}`;
 
   upgrade.spriteLine?.append(sprite);
 }
