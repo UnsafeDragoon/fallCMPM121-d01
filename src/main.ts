@@ -6,6 +6,38 @@ import tileUrl from "./assets/clker-free-vector-images-beer-309778_1280.png?no-i
 // import { upgrade } from "asset:///node/undici/api.d.ts";
 import backgroundUrl from "./assets/patrick-tomasso-GXXYkSwndP4-unsplash.jpg?no-inline";
 
+class SoundManager {
+  private soundPath: string;
+
+  constructor(soundPath: string) {
+    this.soundPath = soundPath;
+  }
+
+  public play(): void {
+    const audio = new Audio(this.soundPath);
+    audio.volume = 0.3;
+    audio.currentTime = 0;
+    audio.play().catch((error) => {
+      console.error("Error playing audio:", error);
+    });
+  }
+}
+
+const music = new Audio(
+  "./src/assets/poradovskyi-cozy-chill-lounge-music-469048.mp3",
+);
+music.loop = true;
+
+const clickSFX = new SoundManager(
+  "./src/assets/freesound_community-water-drip-45622.mp3",
+);
+
+const buySFX = new SoundManager(
+  "./src/assets/u_byub5wd934-cashier-quotka-chingquot-sound-effect-129698.mp3",
+);
+
+let musicOn = false;
+
 let dropCount = 0;
 let totalDrops = 0;
 let currDPS = 0;
@@ -16,10 +48,11 @@ const upgrades = {
     name: "Proper Clothing",
     desc:
       "People tend to buy more beer if their bartender doesn't look like a homeless person off the street. Get a snazzy suit and tie.",
-
     cost: 500,
     dropsPerClick: 5,
     owned: 0,
+    spriteLine: null as HTMLDivElement | null,
+    url: "bartenderSuit.png",
   },
   betterBeer: {
     id: "betterBeer",
@@ -31,6 +64,8 @@ const upgrades = {
     cost: 50000,
     dropsPerClick: 15,
     owned: 0,
+    spriteLine: null as HTMLDivElement | null,
+    url: "premBeer.png",
   },
   advertising: {
     id: "advertising",
@@ -42,6 +77,8 @@ const upgrades = {
     cost: 1000000,
     dropsPerClick: 50,
     owned: 0,
+    spriteLine: null as HTMLDivElement | null,
+    url: "EDPDN4AAKFPZ5DXIKK5G7XXTEQ.jpg",
   },
 
   moreTap: {
@@ -54,6 +91,8 @@ const upgrades = {
     cost: 5,
     dropRate: 0.1,
     owned: 0,
+    spriteLine: null as HTMLDivElement | null,
+    url: "tap.png",
   },
   barry: {
     name: "Barry",
@@ -63,6 +102,8 @@ const upgrades = {
     cost: 100,
     dropRate: 1,
     owned: 0,
+    spriteLine: null as HTMLDivElement | null,
+    url: "barry.png",
   },
   beerKeg: {
     name: "Beer Keg",
@@ -72,6 +113,8 @@ const upgrades = {
     cost: 500,
     dropRate: 10,
     owned: 0,
+    spriteLine: null as HTMLDivElement | null,
+    url: "keg.png",
   },
   beerShowers: {
     name: "Beer Shower",
@@ -80,6 +123,8 @@ const upgrades = {
     cost: 2000,
     dropRate: 50,
     owned: 0,
+    spriteLine: null as HTMLDivElement | null,
+    url: "beerShower.png",
   },
   beerSlide: {
     name: "Beer Slip-n-Slide",
@@ -89,6 +134,9 @@ const upgrades = {
     cost: 10000,
     dropRate: 100,
     owned: 0,
+    spriteLine: null as HTMLDivElement | null,
+    url:
+      "75628038-sliding-down-a-fun-water-slide-at-a-waterpark-happy-man-is-raising-his-arms-as-he-enjoys-the-ride (1).jpg",
   },
   beerRiver: {
     name: "River of Beer",
@@ -98,6 +146,8 @@ const upgrades = {
     cost: 200000,
     dropRate: 250,
     owned: 0,
+    spriteLine: null as HTMLDivElement | null,
+    url: "beerRiver.png",
   },
   beerGieser: {
     name: "Beer Gieser",
@@ -107,13 +157,15 @@ const upgrades = {
     cost: 1000000,
     dropRate: 500,
     owned: 0,
+    spriteLine: null as HTMLDivElement | null,
+    url: "beehive (1).jpg",
   },
 };
 
 const app = document.querySelector<HTMLElement>("#app")!;
 app.style.display = "flex";
 app.style.flexDirection = "column";
-app.style.height = "100vh";
+app.style.minHeight = "100vh";
 
 app.style.backgroundImage =
   `linear-gradient( rgba(0,0,0,.5), rgba(0, 0, 0, 0.81) ), 
@@ -136,6 +188,7 @@ const statsDisplay = document.createElement("p");
 statsDisplay.style.fontSize = "18px";
 statsDisplay.style.textAlign = "center";
 statsDisplay.style.whiteSpace = "pre-line";
+statsDisplay.style.userSelect = "none";
 
 statsDisplay.style.color = "white";
 
@@ -174,6 +227,7 @@ image.alt = "Beer glass - click to pour beer";
 image.width = 300;
 image.height = 300;
 image.draggable = false;
+image.style.userSelect = "none";
 
 image.style.cursor = "pointer";
 
@@ -181,6 +235,14 @@ image.style.position = "absolute";
 image.style.top = "0";
 
 progContainer.append(image);
+
+const spriteContainer = document.createElement("div");
+
+spriteContainer.style.display = "flex";
+spriteContainer.style.flexDirection = "column";
+spriteContainer.style.marginTop = "15vh";
+
+app.append(spriteContainer);
 
 const upgradeContainer = document.createElement("div");
 
@@ -226,11 +288,20 @@ for (const [id, upgrade] of Object.entries(upgrades)) {
   });
 
   button.addEventListener("click", () => {
+    buySFX.play();
     purchaseUpgrade(upgrade);
     updateDisplay();
   });
 
   upgradeContainer.append(button);
+
+  const spriteLine = document.createElement("div");
+  spriteLine.style.width = "100%";
+  spriteLine.style.display = "flex";
+  spriteLine.style.justifyContent = "center";
+  spriteContainer.append(spriteLine);
+
+  upgrade.spriteLine = spriteLine;
 }
 
 function purchaseUpgrade(upgrade: Upgrade) {
@@ -246,8 +317,19 @@ function purchaseUpgrade(upgrade: Upgrade) {
     currDPS += upgrade.dropRate;
   }
 
+  addSprite(upgrade);
+
   upgrade.owned++;
   upgrade.cost = inflatePrice(upgrade.cost);
+}
+
+function addSprite(upgrade: Upgrade) {
+  const dir = "./src/assets/upgrade-sprites/";
+  const sprite = document.createElement("img");
+  sprite.style.width = "50px";
+  sprite.src = `${dir}${upgrade.url}`;
+
+  upgrade.spriteLine?.append(sprite);
 }
 
 function updateUpgradeButtons() {
@@ -296,6 +378,13 @@ function updateDisplay() {
 }
 
 image.addEventListener("click", () => {
+  if (!musicOn) {
+    music.play();
+    musicOn = true;
+  }
+
+  clickSFX.play();
+
   dropCount += currDPC;
   totalDrops += currDPC;
   updateDisplay();
