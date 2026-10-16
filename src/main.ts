@@ -190,8 +190,6 @@ upgradeContainer.style.flexWrap = "wrap";
 upgradeContainer.style.justifyContent = "center";
 upgradeContainer.style.gap = "10px";
 
-//upgradeContainer.style.position = "fixed";
-
 upgradeContainer.style.marginTop = "50px";
 upgradeContainer.style.bottom = "20px";
 upgradeContainer.style.left = "0";
@@ -282,11 +280,6 @@ function updateUpgradeButtons() {
   }
 }
 
-// const message = document.createElement("p");
-// message.textContent = "Your project starts here.";
-
-// app.append(message);
-
 function updateDisplay() {
   heading.textContent = `Drops: ${
     Math.floor(dropCount * 10) / 10
@@ -305,8 +298,6 @@ function updateDisplay() {
 image.addEventListener("click", () => {
   dropCount += currDPC;
   totalDrops += currDPC;
-  //console.log(`Drop count now: ${dropCount}`);
-
   updateDisplay();
 });
 
@@ -328,8 +319,6 @@ function frame(Time: number) {
   totalDrops += currDPS * deltaTime;
 
   updateDisplay();
-
-  //if (Time % 1000 === 0) console.log(Time / 1000);
 
   requestAnimationFrame(frame);
 }
