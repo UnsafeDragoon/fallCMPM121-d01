@@ -6,6 +6,7 @@ import tileUrl from "./assets/clker-free-vector-images-beer-309778_1280.png?no-i
 // import { upgrade } from "asset:///node/undici/api.d.ts";
 
 let dropCount = 0;
+let totalDrops = 0;
 let currDPS = 0;
 let currDPC = 1;
 
@@ -287,22 +288,23 @@ function updateUpgradeButtons() {
 // app.append(message);
 
 function updateDisplay() {
-  heading.textContent = `Drops Served: ${
+  heading.textContent = `Drops: ${
     Math.floor(dropCount * 10) / 10
-  } \n Glasses Served: ${Math.floor(dropCount / 100)}`;
+  } \n Glasses Served: ${Math.floor(totalDrops / 100)}`;
 
   statsDisplay.textContent =
     `Drops per click: ${currDPC} \n Drops per second: ${
       Math.floor(currDPS * 10) / 10
     }`;
 
-  progressBar.style.height = `${determineProgress(dropCount)}%`;
+  progressBar.style.height = `${determineProgress(totalDrops)}%`;
 
   updateUpgradeButtons();
 }
 
 image.addEventListener("click", () => {
   dropCount += currDPC;
+  totalDrops += currDPC;
   //console.log(`Drop count now: ${dropCount}`);
 
   updateDisplay();
@@ -323,6 +325,7 @@ function frame(Time: number) {
   LastTime = Time;
 
   dropCount += currDPS * deltaTime;
+  totalDrops += currDPS * deltaTime;
 
   updateDisplay();
 
