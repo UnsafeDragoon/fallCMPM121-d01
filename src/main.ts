@@ -4,6 +4,7 @@
 // import { log } from "node:console";
 import tileUrl from "./assets/clker-free-vector-images-beer-309778_1280.png?no-inline";
 // import { upgrade } from "asset:///node/undici/api.d.ts";
+import backgroundUrl from "./assets/patrick-tomasso-GXXYkSwndP4-unsplash.jpg?no-inline";
 
 let dropCount = 0;
 let totalDrops = 0;
@@ -116,7 +117,7 @@ app.style.height = "100vh";
 
 app.style.backgroundImage =
   `linear-gradient( rgba(0,0,0,.5), rgba(0, 0, 0, 0.81) ), 
-url("src/assets/patrick-tomasso-GXXYkSwndP4-unsplash.jpg")`;
+  url("${backgroundUrl}")`;
 app.style.backgroundSize = "100%";
 
 const heading = document.createElement("h1");
