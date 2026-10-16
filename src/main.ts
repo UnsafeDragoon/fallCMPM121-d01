@@ -170,7 +170,7 @@ progContainer.append(progressBar);
 
 const image = document.createElement("img");
 image.src = tileUrl;
-image.alt = "A teal tile with a cream circle";
+image.alt = "Beer glass - click to pour beer";
 image.width = 300;
 image.height = 300;
 image.draggable = false;
@@ -228,29 +228,28 @@ for (const [id, upgrade] of Object.entries(upgrades)) {
   });
 
   button.addEventListener("click", () => {
-    if (dropCount < upgrade.cost) {
-      return;
-    }
-
-    dropCount -= upgrade.cost;
-
-    // Apply upgrade bonus
-    if ("dropsPerClick" in upgrade) {
-      currDPC += upgrade.dropsPerClick;
-    } else {
-      currDPS += upgrade.dropRate;
-    }
-
-    // Update upgrade progression
-    upgrade.owned++;
-    upgrade.cost = inflatePrice(upgrade.cost);
-
-    console.log(`Purchased ${upgrade.name}`);
-
+    purchaseUpgrade(upgrade);
     updateDisplay();
   });
 
   upgradeContainer.append(button);
+}
+
+function purchaseUpgrade(upgrade: Upgrade) {
+  if (dropCount < upgrade.cost) {
+    return;
+  }
+
+  dropCount -= upgrade.cost;
+
+  if ("dropsPerClick" in upgrade) {
+    currDPC += upgrade.dropsPerClick;
+  } else {
+    currDPS += upgrade.dropRate;
+  }
+
+  upgrade.owned++;
+  upgrade.cost = inflatePrice(upgrade.cost);
 }
 
 function updateUpgradeButtons() {
