@@ -14,7 +14,7 @@ In Beer Clicker, players run a bar and produce beer by clicking a glass. As prod
 
 ## Play the Game
 
-**Playable game:** [Add deployed game URL here]
+**Playable game:** [Link to game](https://unsafedragoon.github.io/fallCMPM121-d01/)
 
 ### How to Play
 
@@ -42,8 +42,8 @@ The interface displays available drops, lifetime glasses served, production rate
 Clone the repository:
 
 ```bash
-git clone https://github.com/UnsafeDragoon/fallCMPM130-d01.git
-cd fallCMPM130-d01
+git clone https://github.com/UnsafeDragoon/fallCMPM121-d01.git
+cd fallCMPM121-d01
 ```
 
 Install dependencies:
@@ -103,6 +103,17 @@ Upgrade buttons are automatically generated from this shared data rather than be
 - `determineProgress()`: Calculates how full the beer glass should appear.
 - `frame()`: Uses `requestAnimationFrame()` and elapsed time to calculate automatic production independently of frame rate.
 
+### Audio System
+
+The game includes background music and sound effects to make
+the bartending experience more interactive.
+
+- Background music begins after the player's first click and loops.
+- Clicking the beer glass plays a water-drip sound.
+- Purchasing upgrades plays a cashier sound effect.
+- The `SoundManager` class provides shared sound-effect playback
+  behavior, including volume control.
+
 ## Design Revision
 
 During development, our upgrade system initially used two separate event listeners for each upgrade button: one to process purchases and another to apply production bonuses.
@@ -123,8 +134,8 @@ This makes it easier to modify purchasing behavior without rewriting the button 
 
 ### Relevant Commits
 
-- [Consolidate upgrade purchase logic](https://github.com/UnsafeDragoon/fallCMPM130-d01/commit/2d0b584ef0089bd7f4ab51ce676052138403a3d6)
-- [Extract purchasing logic into a dedicated function](https://github.com/UnsafeDragoon/fallCMPM130-d01/commit/7bae279a77c1976ab1d734c38595d8ca22124bce)
+- [Consolidate upgrade purchase logic](https://github.com/UnsafeDragoon/fallCMPM121-d01/commit/2d0b584ef0089bd7f4ab51ce676052138403a3d6)
+- [Extract purchasing logic into a dedicated function](https://github.com/UnsafeDragoon/fallCMPM121-d01/commit/7bae279a77c1976ab1d734c38595d8ca22124bce)
 
 ## Data-Driven Design
 
@@ -138,12 +149,6 @@ Upgrades provide either:
 The same purchasing and rendering logic processes every upgrade.
 
 Adding another upgrade generally only requires adding a new entry to the `upgrades` object.
-
-### Extension Through the Shared Model
-
-[Insert explanation here]
-
-**Relevant commit:** [Add Step 10 commit link](ADD_COMMIT_URL)
 
 ## Asset and Documentation Credits
 
